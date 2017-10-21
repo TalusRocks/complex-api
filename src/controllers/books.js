@@ -12,7 +12,7 @@ function getOneBook(req, res, next) {
 }
 
 function createBook(req, res, next) {
-  console.log(req.body, req.query);
+  console.log(req.body);
   const body = req.body
   const data = model.createBook(body)
   res.status(201).json({ data })

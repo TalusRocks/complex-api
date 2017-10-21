@@ -1,5 +1,5 @@
 const uuid = require('uuid/v4')
-const books = require('../../db/books')
+const books = require('../../data/books')
 
 function getAllBooks() {
   return books
