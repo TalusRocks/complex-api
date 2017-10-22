@@ -1,10 +1,6 @@
 const uuid = require('uuid/v4')
 const fs = require('fs')
 const books = JSON.parse(fs.readFileSync('./db/books.json', 'utf-8'))
-const authors = [
-  { name: "JK Rowling"},
-  { name: "Ernest Hemingway"}
-]
 
 function getAllBooks() {
   return books
@@ -12,9 +8,15 @@ function getAllBooks() {
 
 function getBookAuthors(bookId) {
   const book = books.find( book => book.id === bookId)
-  return book.authors
-}
 
+  let response
+  if(!book){
+    response = {errors: {message: "could not find that book"}}
+  } else {
+    response = book.authors
+  }
+  return response
+}
 
 function getOneBook(bookId) {
   const book = books.find( book => book.id === bookId)
@@ -50,6 +52,28 @@ function createBook(body) {
   return response
 }
 
+function createAuthor(body, bookId) {
+  const book = books.find( book => book.id === bookId)
+  const name = body.name
+  const id = uuid()
+
+  let response
+  if(!book){
+    response = {errors: {message: "could not find that book"}}
+  } else if (!name) {
+    response = {errors: {message: "please provide author name"}}
+  } else {
+    const author = { id, name }
+    book.authors.push(author)
+
+    const result = JSON.stringify(books)
+    fs.writeFileSync('./db/books.json', result)
+
+    response = author
+  }
+  return response
+}
+
 function updateBook(bookId, body) {
   const book = books.find(function(book){
     return book.id === bookId
@@ -74,6 +98,31 @@ function updateBook(bookId, body) {
   return response
 }
 
+function updateAuthor(bookId, authorId, body) {
+  const book = books.find(function(book){
+    return book.id === bookId
+  })
+  if (!book) {
+    return {errors: {message: "could not find that book"}}
+  }
+  const author = book.authors.find(function(author){
+    return author.id === authorId
+  })
+
+  let response
+  if (!author){
+    response = {errors: {message: "could not find that author"}}
+  } else if (!body.name){
+    response = {errors: {message: "please provide a new author name"}}
+  } else {
+    author.name = body.name
+    const result = JSON.stringify(books)
+    fs.writeFileSync('./db/books.json', result)
+    response = author
+  }
+  return response
+}
+
 function destroyBook(bookId) {
   const book = books.find(function(book){
     return book.id === bookId
@@ -92,4 +141,28 @@ function destroyBook(bookId) {
   return response
 }
 
-module.exports = { getAllBooks, getOneBook, createBook, updateBook, destroyBook, getBookAuthors }
+function destroyAuthor(bookId, authorId) {
+  const book = books.find(function(book){
+    return book.id === bookId
+  })
+  if (!book) {
+    return {errors: {message: "could not find that book"}}
+  }
+  const author = book.authors.find(function(author){
+    return author.id === authorId
+  })
+
+  let response
+  if (!author) {
+    response = {errors: {message: "could not find that author"}}
+  } else {
+    const index = book.authors.indexOf(author)
+    const deletedAuthor = book.authors.splice(index, 1)
+    const result = JSON.stringify(books)
+    fs.writeFileSync('./db/books.json', result)
+    response = deletedAuthor
+  }
+  return response
+}
+
+module.exports = { getAllBooks, getOneBook, createBook, updateBook, destroyBook, getBookAuthors, createAuthor, updateAuthor, destroyAuthor }
