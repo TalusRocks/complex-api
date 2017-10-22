@@ -9,8 +9,8 @@ app.disable('x-powered-by')
 app.use(bodyParser.json())
 app.use(morgan('dev'))
 
-const authorRoutes = require('./src/routes/authors')
-app.use('/authors', authorRoutes)
+// const authorRoutes = require('./src/routes/authors')
+// app.use('/books/:bookId/authors', authorRoutes)
 
 const bookRoutes = require('./src/routes/books')
 app.use('/books', bookRoutes)

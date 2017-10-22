@@ -8,4 +8,7 @@ router.post('/', ctrl.createBook)
 router.put('/:bookId', ctrl.updateBook)
 router.delete('/:bookId', ctrl.destroyBook)
 
+router.get('/:bookId/authors', ctrl.getBookAuthors)
+
+
 module.exports = router

@@ -5,6 +5,13 @@ function getAllBooks(req, res, next) {
   res.status(200).json({ data })
 }
 
+////////////////////////////////////////////authors
+function getBookAuthors(req, res, next) {
+  const bookId = req.params.bookId
+  const data = model.getBookAuthors(bookId)
+  res.status(200).json({ data })
+}
+
 function getOneBook(req, res, next) {
   const bookId = req.params.bookId
   const data = model.getOneBook(bookId)
@@ -30,4 +37,4 @@ function destroyBook(req, res, next) {
   res.status(200).json({ data })
 }
 
-module.exports = { getAllBooks, getOneBook, createBook, updateBook, destroyBook }
+module.exports = { getAllBooks, getOneBook, createBook, updateBook, destroyBook, getBookAuthors }

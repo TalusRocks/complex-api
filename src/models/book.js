@@ -1,10 +1,20 @@
 const uuid = require('uuid/v4')
 const fs = require('fs')
 const books = JSON.parse(fs.readFileSync('./db/books.json', 'utf-8'))
+const authors = [
+  { name: "JK Rowling"},
+  { name: "Ernest Hemingway"}
+]
 
 function getAllBooks() {
   return books
 }
+
+function getBookAuthors(bookId) {
+  const book = books.find( book => book.id === bookId)
+  return book.authors
+}
+
 
 function getOneBook(bookId) {
   const book = books.find( book => book.id === bookId)
@@ -82,4 +92,4 @@ function destroyBook(bookId) {
   return response
 }
 
-module.exports = { getAllBooks, getOneBook, createBook, updateBook, destroyBook }
+module.exports = { getAllBooks, getOneBook, createBook, updateBook, destroyBook, getBookAuthors }
