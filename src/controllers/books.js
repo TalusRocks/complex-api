@@ -12,7 +12,6 @@ function getOneBook(req, res, next) {
 }
 
 function createBook(req, res, next) {
-  console.log(req.body);
   const body = req.body
   const data = model.createBook(body)
   res.status(201).json({ data })
@@ -21,10 +20,14 @@ function createBook(req, res, next) {
 function updateBook(req, res, next) {
   const bookId = req.params.bookId
   const body = req.body
-  const data = model.createBook(bookId, body)
+  const data = model.updateBook(bookId, body)
   res.status(200).json({ data })
 }
 
-function destroyBook(req, res, next) {}
+function destroyBook(req, res, next) {
+  const bookId = req.params.bookId
+  const data = model.destroyBook(bookId)
+  res.status(200).json({ data })
+}
 
 module.exports = { getAllBooks, getOneBook, createBook, updateBook, destroyBook }
